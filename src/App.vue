@@ -118,7 +118,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { Editor } from '@bytemd/vue-next'
 import FileTree from './components/FileTree.vue'
 
@@ -132,6 +132,11 @@ import highlight from '@bytemd/plugin-highlight'
 import math from '@bytemd/plugin-math'
 import mermaid from '@bytemd/plugin-mermaid'
 import mediumZoom from '@bytemd/plugin-medium-zoom'
+
+// 导入 Tauri 相关模块
+import { open, save } from '@tauri-apps/plugin-dialog'
+import { writeTextFile, readTextFile } from '@tauri-apps/plugin-fs'
+import { listen } from '@tauri-apps/api/event'
 
 // 主题管理
 const themeStore = useThemeStore()
@@ -311,9 +316,164 @@ const getThemeTooltip = () => {
   return modeMap[themeStore.mode] || '切换主题'
 }
 
+// 新增：打开本地 Markdown 文件
+const openLocalFile = async () => {
+  try {
+    const selected = await open({
+      multiple: false,
+      filters: [{
+        name: 'Markdown Files',
+        extensions: ['md', 'markdown', 'txt']
+      }]
+    })
+    
+    if (selected) {
+      // 读取文件内容
+      const content = await readTextFile(selected as string)
+      
+      // 创建文件对象
+      const fileName = (selected as string).split('/').pop() || (selected as string).split('\\').pop() || '未命名.md'
+      const newFile: FileItem = {
+        name: fileName,
+        path: selected as string,
+        content: content
+      }
+      
+      // 添加到文件列表并选中
+      files.value.push(newFile)
+      selectFile(newFile)
+    }
+  } catch (error) {
+    console.error('打开文件失败:', error)
+  }
+}
+
+// 新增：保存 Markdown 文件到本地
+const saveFileToLocal = async () => {
+  if (!currentFile.value) return
+  
+  try {
+    // 如果文件已经有路径，直接保存
+    if (currentFile.value.path && currentFile.value.path !== currentFile.value.name) {
+      await writeTextFile(currentFile.value.path, markdown.value)
+      isModified.value = false
+      console.log('文件已保存:', currentFile.value.path)
+    } else {
+      // 弹出保存对话框
+      const filePath = await save({
+        filters: [{
+          name: 'Markdown Files',
+          extensions: ['md']
+        }]
+      })
+      
+      if (filePath) {
+        await writeTextFile(filePath, markdown.value)
+        // 更新文件路径
+        currentFile.value.path = filePath
+        currentFile.value.name = filePath.split('/').pop() || filePath.split('\\').pop() || currentFile.value.name
+        currentFileName.value = currentFile.value.name
+        isModified.value = false
+        console.log('文件已保存到:', filePath)
+      }
+    }
+  } catch (error) {
+    console.error('保存文件失败:', error)
+  }
+}
+
+// 新增：另存为功能
+const saveFileAs = async () => {
+  if (!currentFile.value) return
+  
+  try {
+    // 弹出保存对话框，使用当前文件名作为默认文件名
+    const defaultPath = currentFile.value.path && currentFile.value.path !== currentFile.value.name 
+      ? currentFile.value.path 
+      : currentFile.value.name || '未命名.md'
+      
+    const filePath = await save({
+      defaultPath: defaultPath,
+      filters: [{
+        name: 'Markdown Files',
+        extensions: ['md']
+      }]
+    })
+    
+    if (filePath) {
+      await writeTextFile(filePath, markdown.value)
+      // 更新文件路径
+      currentFile.value.path = filePath
+      currentFile.value.name = filePath.split('/').pop() || filePath.split('\\').pop() || currentFile.value.name
+      currentFileName.value = currentFile.value.name
+      isModified.value = false
+      console.log('文件已另存为:', filePath)
+    }
+  } catch (error) {
+    console.error('另存为文件失败:', error)
+  }
+}
+
+// 新增：处理键盘快捷键
+const handleKeyDown = (event: KeyboardEvent) => {
+  // Ctrl/Cmd + O 打开文件
+  if ((event.ctrlKey || event.metaKey) && event.key === 'o') {
+    event.preventDefault()
+    openLocalFile()
+  }
+  // Ctrl/Cmd + S 保存文件
+  else if ((event.ctrlKey || event.metaKey) && event.key === 's') {
+    event.preventDefault()
+    saveFileToLocal()
+  }
+  // Ctrl/Cmd + N 新建文件
+  else if ((event.ctrlKey || event.metaKey) && event.key === 'n') {
+    event.preventDefault()
+    createNewFile()
+  }
+}
+
 // 初始化主题
 onMounted(() => {
   themeStore.initTheme()
+  
+  // 添加键盘事件监听器
+  window.addEventListener('keydown', handleKeyDown)
+  
+  // 监听菜单事件
+  listen('menu', (event) => {
+    console.log('收到菜单事件:', event.payload);
+    switch (event.payload) {
+      case 'new-file':
+        console.log('新建文件');
+        createNewFile()
+        break
+      case 'open-file':
+        console.log('打开文件');
+        openLocalFile()
+        break
+      case 'save-file':
+        console.log('保存文件');
+        saveFileToLocal()
+        break
+      case 'save-file-as':
+        console.log('另存为');
+        saveFileAs()
+        break
+      default:
+        console.log('未知菜单事件:', event.payload);
+    }
+  }).then(() => {
+    // 菜单事件监听器已注册
+    console.log('菜单事件监听器已注册');
+  }).catch((error) => {
+    console.error('注册菜单事件监听器失败:', error);
+  });
+})
+
+// 清理事件监听器
+onUnmounted(() => {
+  window.removeEventListener('keydown', handleKeyDown)
 })
 </script>
 
