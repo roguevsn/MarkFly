@@ -1,0 +1,338 @@
+/* CSS 变量定义 */
+:root {
+  /* 浅色主题 */
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8f9fa;
+  --bg-tertiary: #e9ecef;
+  --text-primary: #212529;
+  --text-secondary: #6c757d;
+  --text-tertiary: #adb5bd;
+  --border-color: #dee2e6;
+  --accent-color: #DFDFE0;
+  --hover-bg: #f8f9fa;
+  --success-color: #198754;
+  --warning-color: #ffc107;
+  --danger-color: #dc3545;
+  --info-color: #0dcaf0;
+  
+  /* 编辑器相关 */
+  --editor-bg: #ffffff;
+  --editor-text: #212529;
+  --editor-border: #dee2e6;
+  --editor-gutter: #f8f9fa;
+  --editor-line-number: #6c757d;
+  --editor-cursor: #212529;
+  --editor-selection: rgba(223, 223, 224, 0.2);
+  
+  /* 代码高亮 */
+  --code-bg: #f8f9fa;
+  --code-text: #e83e8c;
+  --code-border: #dee2e6;
+}
+
+/* 深色主题 */
+:root.dark {
+  --bg-primary: #1e1e1e;
+  --bg-secondary: #252526;
+  --bg-tertiary: #2d2d30;
+  --text-primary: #cccccc;
+  --text-secondary: #969696;
+  --text-tertiary: #6a6a6a;
+  --border-color: #3e3e42;
+  --accent-color: #DFDFE0;
+  --hover-bg: #2a2d2e;
+  --success-color: #28a745;
+  --warning-color: #ffc107;
+  --danger-color: #dc3545;
+  --info-color: #17a2b8;
+  
+  /* 编辑器相关 */
+  --editor-bg: #1e1e1e;
+  --editor-text: #cccccc;
+  --editor-border: #3e3e42;
+  --editor-gutter: #252526;
+  --editor-line-number: #858585;
+  --editor-cursor: #cccccc;
+  --editor-selection: rgba(223, 223, 224, 0.3);
+  
+  /* 代码高亮 */
+  --code-bg: #2d2d30;
+  --code-text: #f8f8f2;
+  --code-border: #3e3e42;
+}
+
+/* 全局样式重置 */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  transition: background-color 0.3s ease, color 0.3s ease;
+  overscroll-behavior: none; /* 防止整个页面的过度滚动，但保留正常滚动 */
+}
+
+#app {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+/* 滚动条样式 */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--text-secondary);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-color);
+}
+
+/* Firefox 滚动条 */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--text-secondary) var(--bg-secondary);
+}
+
+/* ByteMD 编辑器样式定制 */
+.bytemd {
+  height: 100% !important;
+  border: none !important;
+  border-radius: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  background: var(--editor-bg) !important;
+  color: var(--editor-text) !important;
+  /* 移除 overflow: hidden，让内部组件处理滚动 */
+}
+
+/* 保留ByteMD自带的工具栏，但调整样式 */
+.bytemd-toolbar {
+  background: var(--bg-secondary) !important; /* 与知识库背景色一致 */
+  border-bottom: 1px solid var(--border-color) !important;
+  padding: 8px 16px !important;
+  flex-shrink: 0 !important;
+  min-height: 35px !important; /* 与文件标签栏高度一致 */
+  box-sizing: border-box !important; /* 确保高度计算一致 */
+  display: flex !important;
+  align-items: center !important;
+  z-index: 9 !important; /* 确保层级关系 */
+  position: relative !important;
+}
+
+.bytemd-toolbar-icon {
+  color: var(--text-secondary) !important;
+  transition: color 0.2s ease !important;
+}
+
+.bytemd-toolbar-icon:hover {
+  color: var(--text-primary) !important;
+  background: var(--hover-bg) !important;
+}
+
+.bytemd-body {
+  flex: 1 !important;
+  display: flex !important;
+  /* 移除 overflow: hidden，让内部组件处理滚动 */
+  min-height: 0 !important; /* 确保flex子元素可以收缩 */
+}
+
+.bytemd-editor {
+  flex: 1 !important;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace !important;
+  font-size: 14px !important;
+  line-height: 1.6 !important;
+  padding: 0 !important; /* 移除padding，让CodeMirror处理 */
+  /* 移除 overflow: hidden，让内部的CodeMirror处理滚动 */
+  overscroll-behavior: contain !important; /* 防止滚动穿透 */
+  border-right: 1px solid var(--border-color) !important;
+  background: var(--editor-bg) !important;
+  color: var(--editor-text) !important;
+}
+
+.bytemd-preview {
+  flex: 1 !important;
+  padding: 20px !important;
+  background: var(--editor-bg) !important;
+  color: var(--editor-text) !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  overscroll-behavior: contain !important; /* 防止滚动穿透 */
+  min-height: 0 !important; /* 确保flex子元素可以收缩 */
+}
+
+/* CodeMirror 编辑器优化 */
+.cm-editor {
+  height: 100% !important;
+  background: var(--editor-bg) !important;
+  color: var(--editor-text) !important;
+  /* 移除 overflow: hidden，让cm-scroller处理滚动 */
+}
+
+.cm-scroller {
+  overflow-y: auto !important;
+  overflow-x: auto !important;
+  overscroll-behavior: contain !important; /* 防止滚动穿透 */
+  height: 100% !important;
+  padding: 20px !important; /* 把padding放在这里 */
+}
+
+.cm-content {
+  min-height: calc(100% - 40px) !important; /* 考虑padding */
+  color: var(--editor-text) !important;
+  padding: 0 !important; /* 移除内容的padding */
+}
+
+.cm-focused {
+  outline: none !important;
+}
+
+.cm-gutters {
+  background: var(--editor-gutter) !important;
+  border-right: 1px solid var(--border-color) !important;
+}
+
+.cm-lineNumbers .cm-gutterElement {
+  color: var(--editor-line-number) !important;
+}
+
+.cm-cursor {
+  border-left: 1px solid var(--editor-cursor) !important;
+}
+
+.cm-selectionBackground {
+  background: var(--editor-selection) !important;
+}
+
+/* Markdown 预览样式 */
+.bytemd-preview .markdown-body {
+  max-width: none !important;
+  font-size: 14px !important;
+  line-height: 1.6 !important;
+  background: var(--editor-bg) !important;
+  color: var(--editor-text) !important;
+}
+
+/* 添加 Markdown 链接样式 */
+.bytemd-preview .markdown-body a {
+  color: var(--accent-color) !important;
+  text-decoration: none !important;
+}
+
+.bytemd-preview .markdown-body a:hover {
+  text-decoration: underline !important;
+}
+
+.bytemd-preview .markdown-body h1,
+.bytemd-preview .markdown-body h2,
+.bytemd-preview .markdown-body h3,
+.bytemd-preview .markdown-body h4,
+.bytemd-preview .markdown-body h5,
+.bytemd-preview .markdown-body h6 {
+  color: var(--text-primary) !important;
+  border-bottom-color: var(--border-color) !important;
+}
+
+.bytemd-preview .markdown-body code {
+  background: var(--code-bg) !important;
+  color: var(--code-text) !important;
+  border: 1px solid var(--code-border) !important;
+}
+
+.bytemd-preview .markdown-body pre {
+  background: var(--code-bg) !important;
+  border: 1px solid var(--code-border) !important;
+}
+
+.bytemd-preview .markdown-body blockquote {
+  border-left-color: var(--border-color) !important;
+  color: var(--text-secondary) !important;
+}
+
+.bytemd-preview .markdown-body table th,
+.bytemd-preview .markdown-body table td {
+  border-color: var(--border-color) !important;
+}
+
+.bytemd-preview .markdown-body table th {
+  background: var(--bg-secondary) !important;
+}
+
+.bytemd-preview .markdown-body table tr:nth-child(2n) {
+  background: var(--bg-secondary) !important;
+}
+
+/* 确保滚动区域正确，防止滚动穿透 */
+.bytemd-split .bytemd-editor,
+.bytemd-split .bytemd-preview {
+  height: 100% !important;
+  /* 移除 overflow: hidden，让内部组件处理滚动 */
+  overscroll-behavior: contain !important;
+  min-height: 0 !important;
+}
+
+.bytemd-split .bytemd-preview {
+  overflow-y: auto !important; /* 预览区域需要自己处理滚动 */
+}
+
+/* 确保编辑器区域能够正常滚动 */
+.bytemd-editor .cm-editor {
+  height: 100% !important;
+}
+
+.bytemd-editor .cm-scroller {
+  max-height: 100% !important;
+  overflow-y: auto !important;
+}
+
+/* 修复可能的滚动问题 */
+.bytemd-editor .cm-editor .cm-scroller {
+  overflow-y: auto !important;
+  overscroll-behavior: contain !important;
+  scrollbar-width: thin !important;
+}
+
+.bytemd-preview {
+  scrollbar-width: thin !important;
+  overscroll-behavior: contain !important;
+}
+
+/* 确保内容区域可以滚动，防止滚动穿透 */
+.bytemd-body > div {
+  height: 100% !important;
+  overflow-y: auto !important;
+  overscroll-behavior: contain !important;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .bytemd-toolbar {
+    padding: 6px 12px !important;
+  }
+  
+  .bytemd-editor,
+  .bytemd-preview {
+    padding: 15px !important;
+  }
+  
+  .bytemd-preview .markdown-body {
+    font-size: 13px !important;
+  }
+}
